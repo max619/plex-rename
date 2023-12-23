@@ -1,0 +1,1 @@
+pylint $(ls -1 *.py)
