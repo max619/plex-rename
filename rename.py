@@ -2,7 +2,7 @@
 Module for renaming files to make them compilent with PLEX media server
 '''
 
-from os import path, listdir
+from os import path, listdir, rename as rename_file
 import re
 import argparse
 
@@ -99,3 +99,7 @@ if __name__ == '__main__':
             exit(1)
 
     print('\nRenaming')
+
+    for src, dst in result.rename_map:
+        print('Moving %s -> %s' % (src, dst))
+        rename_file(src, dst)
