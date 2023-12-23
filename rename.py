@@ -2,8 +2,9 @@
 Module for renaming files to make them compilent with PLEX media server
 '''
 
-from os import path
+from os import path, listdir
 import re
+import argparse
 
 
 class ChangeFileNamesResult:
@@ -44,3 +45,54 @@ def prepare_change_filenames(paths: list[str], season=1) -> ChangeFileNamesResul
         rename_map += [(p, path.join(dir, new_name))]
 
     return ChangeFileNamesResult(rename_map, rename_map_filenames, skipped_files)
+
+
+def prepare_change_filenames_in_dir(dir: str, season=1) -> ChangeFileNamesResult:
+    files = []
+    for f in listdir(dir):
+        full_path = path.join(dir, f)
+        if path.isfile(full_path):
+            files += [full_path]
+
+    return prepare_change_filenames(files, season)
+
+
+def __build_argparser() -> argparse.ArgumentParser:
+    parser = argparse.ArgumentParser(prog='rename.py',
+                                     description='Utility for renaming files to make them compilent with PLEX media server')
+
+    parser.add_argument('dirpath')
+    parser.add_argument('-y', '--run', action='store_true')
+    parser.add_argument('--dry', action='store_true')
+    parser.add_argument('--season')
+
+    return parser
+
+
+if __name__ == '__main__':
+    parser = __build_argparser()
+
+    args = parser.parse_args()
+    season = int(args.season) if args.season is not None else 1
+
+    result = prepare_change_filenames_in_dir(args.dirpath, season)
+
+    print('Will rename following files like so:')
+    for src, dst in result.rename_map_filenames:
+        print('%s -> %s' % (src, dst))
+
+    print('\n\nFollowing files will be skipped:')
+    for p in result.skipped_files:
+        print(p)
+
+    if args.dry:
+        exit(0)
+
+    if args.run is not True:
+        print('\n\nRename? (Y/N):')
+        userInput = input()
+        if userInput.upper() != 'Y':
+            print('Aborting')
+            exit(1)
+
+    print('\nRenaming')
