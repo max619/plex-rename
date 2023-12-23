@@ -55,6 +55,25 @@ class TestRename(unittest.TestCase):
         self.assertEqual(result.rename_map, expected_result)
         self.assertEqual(result.skipped_files, skipped_files)
 
+    def test_unique_destanation(self):
+        test_data = [
+            (
+                'src1',
+                'S01E01.mp4'
+            ),
+            (
+                'src2',
+                'S01E01.mp4'
+            ),
+            (
+                'src3',
+                'S01E02.mkv'
+            ),
+        ]
+
+        res = rename.get_duplicated_destanations(test_data)
+        self.assertEqual(res, [('S01E01.mp4', ['src1', 'src2'])])
+
 
 if __name__ == '__main__':
     unittest.main()

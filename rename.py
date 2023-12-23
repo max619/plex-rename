@@ -60,6 +60,22 @@ def prepare_change_filenames_in_dir(dir: str, season=1) -> ChangeFileNamesResult
     return prepare_change_filenames(files, season)
 
 
+def get_duplicated_destanations(srcToDest: list[(str, str)]) -> list[(str, list[str])]:
+    unique_map: dict[str, list[str]] = dict()
+
+    for src, dest in srcToDest:
+        unique_map.setdefault(dest, [])
+        unique_map[dest] += [src]
+
+    duplicates: list[str, list[str]] = []
+
+    for key in unique_map.keys():
+        if len(unique_map[key]) > 1:
+            duplicates += [(key, unique_map[key])]
+
+    return duplicates
+
+
 def __build_argparser() -> argparse.ArgumentParser:
     parser = argparse.ArgumentParser(prog='rename.py',
                                      description='Utility for renaming files to make them compilent with PLEX media server')
@@ -87,6 +103,16 @@ if __name__ == '__main__':
     print('\n\nFollowing files will be skipped:')
     for p in result.skipped_files:
         print(p)
+
+    duplicates = get_duplicated_destanations(result.rename_map)
+    if len(duplicates) > 0:
+        print('\n\nFound duplicates:')
+        for dst, sources in duplicates:
+            print('Target "%s" is duplicated by:' % dst)
+            for src in sources:
+                print(src)
+
+        exit(1)
 
     if args.dry:
         exit(0)
