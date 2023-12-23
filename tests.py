@@ -41,6 +41,10 @@ class TestRename(unittest.TestCase):
             (
                 'Title_With_Many_Words 2 [08].mp4',
                 'S02E08.mp4'
+            ),
+            (
+                'Title_With_Many_Words 2 S33E9.mp4',
+                'S02E09.mp4'
             )
         ]
 
