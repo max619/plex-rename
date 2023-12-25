@@ -1,4 +1,7 @@
 # plex-rename
+
+![example workflow](https://github.com/max619/plex-rename/actions/workflows/python-app.yml/badge.svg)
+
 This is an untility script for renaming episodes of series to Plex Media Server format
 
 That script will rename series episodes in a following format:
