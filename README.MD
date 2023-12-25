@@ -1,5 +1,5 @@
 # plex-rename
-This is an untility script for renaming series to plex format
+This is an untility script for renaming episodes of series to Plex Media Server format
 
 That script will rename series episodes in a following format:
 ```
