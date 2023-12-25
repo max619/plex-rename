@@ -21,19 +21,20 @@ class ChangeFileNamesResult:
 __episode_regex = re.compile(
     '^(\\[[\\S _\\.]+?\\])?[ _]?(.+)[ _\\.]((\\[((\\d{1,2})([ _]of[ _]\\d{1,2}[ _\\.]?)?)\\])|(\\d{1,2})|([Ss]\\d{1,2}[Ee](\\d{1,2}))|(\\d{1,2}[Xx](\\d{1,2})))([ _\\.]\\[.+?\\])*\\.(.*)$')
 
-__simple_season_and_episode_regex = re.compile('[Ss]\\d{1,2}[Ee](\\d{1,2})')
+__simple_season_and_episode_regex = re.compile(
+    '.*[Ss]\\d{1,2}[Ee](\\d{1,2}).*')
 
 
 def __get_episode_number(filename: str) -> int | None:
+    match = __simple_season_and_episode_regex.match(filename)
+    if match is not None:
+        episode = match.group(1)
+        return int(episode)
+
     match = __episode_regex.match(filename)
     if match is not None:
         episode = match.group(6) if match.group(6) is not None else match.group(8) if match.group(
             8) is not None else match.group(10) if match.group(10) is not None else match.group(12)
-        return int(episode)
-
-    match = __simple_season_and_episode_regex.match(filename)
-    if match is not None:
-        episode = match.group(1)
         return int(episode)
 
     return None
