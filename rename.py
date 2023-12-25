@@ -21,6 +21,23 @@ class ChangeFileNamesResult:
 __episode_regex = re.compile(
     '^(\\[[\\S _\\.]+?\\])?[ _]?(.+)[ _\\.]((\\[((\\d{1,2})([ _]of[ _]\\d{1,2}[ _\\.]?)?)\\])|(\\d{1,2})|([Ss]\\d{1,2}[Ee](\\d{1,2}))|(\\d{1,2}[Xx](\\d{1,2})))([ _\\.]\\[.+?\\])*\\.(.*)$')
 
+__simple_season_and_episode_regex = re.compile('[Ss]\\d{1,2}[Ee](\\d{1,2})')
+
+
+def __get_episode_number(filename: str) -> int | None:
+    match = __episode_regex.match(filename)
+    if match is not None:
+        episode = match.group(6) if match.group(6) is not None else match.group(8) if match.group(
+            8) is not None else match.group(10) if match.group(10) is not None else match.group(12)
+        return int(episode)
+
+    match = __simple_season_and_episode_regex.match(filename)
+    if match is not None:
+        episode = match.group(1)
+        return int(episode)
+
+    return None
+
 
 def prepare_change_filenames(paths: list[str], season=1, prefix=None, prefx_separator='_') -> ChangeFileNamesResult:
     rename_map = []
@@ -32,15 +49,10 @@ def prepare_change_filenames(paths: list[str], season=1, prefix=None, prefx_sepa
         _, extension = path.splitext(p)
         filename = path.basename(p)
 
-        match = __episode_regex.match(filename)
-        if match is None:
+        episode = __get_episode_number(filename)
+        if episode is None:
             skipped_files += [p]
             continue
-
-        episode = match.group(6) if match.group(6) is not None else match.group(
-            8) if match.group(8) is not None else match.group(10) if match.group(10) is not None else match.group(12)
-
-        episode = int(episode)
 
         new_name = 'S%02dE%02d%s' % (season, episode, extension)
 
