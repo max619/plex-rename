@@ -53,14 +53,14 @@ def prepare_change_filenames(paths: list[str], season=1, prefix=None, prefx_sepa
     return ChangeFileNamesResult(rename_map, rename_map_filenames, skipped_files)
 
 
-def prepare_change_filenames_in_dir(dir: str, season=1) -> ChangeFileNamesResult:
+def prepare_change_filenames_in_dir(dir: str, season=1, prefix=None, prefx_separator='_') -> ChangeFileNamesResult:
     files = []
     for f in listdir(dir):
         full_path = path.join(dir, f)
         if path.isfile(full_path):
             files += [full_path]
 
-    return prepare_change_filenames(files, season)
+    return prepare_change_filenames(files, season=season, prefix=prefix, prefx_separator=prefx_separator)
 
 
 def get_duplicated_destanations(srcToDest: list[(str, str)]) -> list[(str, list[str])]:
