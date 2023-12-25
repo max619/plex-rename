@@ -19,7 +19,7 @@ class ChangeFileNamesResult:
 
 
 __episode_regex = re.compile(
-    '^(\\[[\\S _]+?\\])?[ _]?(.+)[ _]((\\[((\\d{1,2})([ _]of[ _]\\d{1,2}[ _]?)?)\\])|(\\d{1,2})|(S\\d{1,2}E(\\d{1,2})))([ _]\\[.+?\\])*\\.(.*)$')
+    '^(\\[[\\S _\\.]+?\\])?[ _]?(.+)[ _\\.]((\\[((\\d{1,2})([ _]of[ _]\\d{1,2}[ _\\.]?)?)\\])|(\\d{1,2})|([Ss]\\d{1,2}[Ee](\\d{1,2})))([ _\\.]\\[.+?\\])*\\.(.*)$')
 
 
 def prepare_change_filenames(paths: list[str], season=1) -> ChangeFileNamesResult:

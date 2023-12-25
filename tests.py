@@ -3,6 +3,10 @@ import rename
 
 
 class TestRename(unittest.TestCase):
+    def __init__(self, methodName: str = "runTest") -> None:
+        super().__init__(methodName)
+        self.maxDiff = None
+
     def test(self):
         skipped_files = [
             'abcd/[SRC]_Title_With_Many_Words_[720p_h264_AAC]_[Additional Info].tmp.bck.avi',
@@ -45,6 +49,18 @@ class TestRename(unittest.TestCase):
             (
                 'Title_With_Many_Words 2 S33E9.mp4',
                 'S02E09.mp4'
+            ),
+            (
+                'title.s01e10.some.info.[H264_AAC_128].mkv',
+                'S02E10.mkv'
+            ),
+            (
+                'title.s01e11.some.info_[H264_AAC_128].mkv',
+                'S02E11.mkv'
+            ),
+            (
+                'title.s01e12.mkv',
+                'S02E12.mkv'
             )
         ]
 
