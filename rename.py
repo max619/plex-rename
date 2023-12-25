@@ -19,7 +19,7 @@ class ChangeFileNamesResult:
 
 
 __episode_regex = re.compile(
-    '^(\\[[\\S _\\.]+?\\])?[ _]?(.+)[ _\\.]((\\[((\\d{1,2})([ _]of[ _]\\d{1,2}[ _\\.]?)?)\\])|(\\d{1,2})|([Ss]\\d{1,2}[Ee](\\d{1,2})))([ _\\.]\\[.+?\\])*\\.(.*)$')
+    '^(\\[[\\S _\\.]+?\\])?[ _]?(.+)[ _\\.]((\\[((\\d{1,2})([ _]of[ _]\\d{1,2}[ _\\.]?)?)\\])|(\\d{1,2})|([Ss]\\d{1,2}[Ee](\\d{1,2}))|(\\d{1,2}[Xx](\\d{1,2})))([ _\\.]\\[.+?\\])*\\.(.*)$')
 
 
 def prepare_change_filenames(paths: list[str], season=1, prefix=None, prefx_separator='_') -> ChangeFileNamesResult:
@@ -38,7 +38,7 @@ def prepare_change_filenames(paths: list[str], season=1, prefix=None, prefx_sepa
             continue
 
         episode = match.group(6) if match.group(6) is not None else match.group(
-            8) if match.group(8) is not None else match.group(10)
+            8) if match.group(8) is not None else match.group(10) if match.group(10) is not None else match.group(12)
 
         episode = int(episode)
 

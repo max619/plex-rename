@@ -61,6 +61,14 @@ class TestRename(unittest.TestCase):
             (
                 'title.s01e12.mkv',
                 'S02E12.mkv'
+            ),
+            (
+                'title.1X13.mkv',
+                'S02E13.mkv'
+            ),
+            (
+                'title.1x14.mkv',
+                'S02E14.mkv'
             )
         ]
 
