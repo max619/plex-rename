@@ -13,5 +13,5 @@ Title_[10]_[SomeSite]_[WEBRip_1080p_HEVC].mkv -> S02E10.mkv
 ## Usage
 
 ```sh
-python rename.py [-h] [-y] [--dry] [--season SEASON] dirpath
+rename.py [-h] [-y] [--dry] [--prefix PREFIX] [--season SEASON] dirpath
 ```

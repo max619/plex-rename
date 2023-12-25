@@ -22,7 +22,7 @@ __episode_regex = re.compile(
     '^(\\[[\\S _\\.]+?\\])?[ _]?(.+)[ _\\.]((\\[((\\d{1,2})([ _]of[ _]\\d{1,2}[ _\\.]?)?)\\])|(\\d{1,2})|([Ss]\\d{1,2}[Ee](\\d{1,2})))([ _\\.]\\[.+?\\])*\\.(.*)$')
 
 
-def prepare_change_filenames(paths: list[str], season=1) -> ChangeFileNamesResult:
+def prepare_change_filenames(paths: list[str], season=1, prefix=None, prefx_separator='_') -> ChangeFileNamesResult:
     rename_map = []
     rename_map_filenames = []
     skipped_files = []
@@ -43,6 +43,9 @@ def prepare_change_filenames(paths: list[str], season=1) -> ChangeFileNamesResul
         episode = int(episode)
 
         new_name = 'S%02dE%02d%s' % (season, episode, extension)
+
+        if prefix is not None:
+            new_name = '%s%s%s' % (prefix, prefx_separator, new_name)
 
         rename_map_filenames += [(filename, new_name)]
         rename_map += [(p, path.join(dir, new_name))]
@@ -83,6 +86,7 @@ def __build_argparser() -> argparse.ArgumentParser:
     parser.add_argument('dirpath')
     parser.add_argument('-y', '--run', action='store_true')
     parser.add_argument('--dry', action='store_true')
+    parser.add_argument('--prefix')
     parser.add_argument('--season')
 
     return parser
@@ -94,7 +98,8 @@ if __name__ == '__main__':
     args = parser.parse_args()
     season = int(args.season) if args.season is not None else 1
 
-    result = prepare_change_filenames_in_dir(args.dirpath, season)
+    result = prepare_change_filenames_in_dir(
+        args.dirpath, season, prefix=args.prefix)
 
     print('Will rename following files like so:')
     for src, dst in result.rename_map_filenames:
